@@ -1,0 +1,39 @@
+/// Helper to size an element
+/// @param {Lenght} $width
+/// @param {Height} $height
+@mixin size($width, $height: $width) {
+  width: $width;
+  height: $height;
+}
+
+/// Minxin to output vendor prefixes
+/// @param {String} $property - Unprefixed CSS property
+/// @param {*} $value - Raw CSS value
+/// @param {List} $prefixes - List of prefixes to output
+@mixin prefix($property, $value, $prefixes: ()) {
+  #{$property}: $value;
+
+  @each $prefix in $prefixes {
+    -#{$prefix}-#{$property}: $value;
+  }
+}
+
+///
+/// @param {String} $break-point -
+@mixin respond-to($break-point) {
+  $raw-query: map_get($break-points, $break-point);
+
+  @if $raw-query {
+    $query: if(
+        type_of($raw-query) == 'string',
+        unquote($raw-query),
+        inspect($raw-query)
+    );
+
+    @media #{$query} {
+      @content
+    }
+  } @else {
+    @error 'No value for `#{$break-point}`.'
+  }
+}
